@@ -1,14 +1,15 @@
-const express = require('express');
-const path = require('path');
-const app = express();
-const PORT = process.env.PORT || 3000;
+# Touba Creil 2026 — Cuisine & Transport
 
-app.use(express.static(path.join(__dirname, 'public')));
+Application de gestion des invités pour le Grand Magal de Touba à Creil.
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+## Déploiement Railway
 
-app.listen(PORT, () => {
-  console.log(`Touba Creil 2026 en ligne sur le port ${PORT}`);
-});
+1. Pushez ce dossier sur GitHub
+2. Connectez le repo sur railway.app
+3. Railway détecte automatiquement Node.js et lance `npm start`
+
+## Identifiants par défaut
+
+- Super Admin : `superadmin / touba2026!`
+- Cuisine : `cuisine1 / cuisine2026`
+- Transport : `transport1 / transport2026`
