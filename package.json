@@ -1,0 +1,15 @@
+{
+  "name": "touba-creil-2026",
+  "version": "1.0.0",
+  "description": "Grand Magal de Touba - Creil 2026 - Cuisine & Transport",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
