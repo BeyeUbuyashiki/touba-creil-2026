@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Touba Creil 2026 — Cuisine & Transport</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --deep:#0f3b38;--mid:#18534f;--accent:#226d68;--bright:#2e8a84;
+  --white:#ffffff;--gold:#d4a843;--gold-light:#e8c97a;
+  --border:rgba(255,255,255,0.13);--shadow:0 8px 40px rgba(10,40,38,0.5);
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--deep);min-height:100vh;overflow-x:hidden}
+.bg-grad{position:fixed;inset:0;z-index:0;background:linear-gradient(145deg,#0c302e 0%,#18534f 45%,#226d68 80%,#2a7f79 100%)}
+.bg-pattern{position:fixed;inset:0;z-index:0;opacity:0.04;background-image:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:20px 20px}
+.bg-orbs{position:fixed;inset:0;z-index:0;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.18}
+.o1{width:600px;height:600px;background:#2e8a84;top:-150px;right:-100px;animation:f1 9s ease-in-out infinite}
+.o2{width:450px;height:450px;background:#0c302e;bottom:-120px;left:-100px;animation:f2 11s ease-in-out infinite}
+.o3{width:280px;height:280px;background:var(--gold);top:45%;right:5%;animation:f3 7s ease-in-out infinite}
+@keyframes f1{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,25px)}}
+@keyframes f2{0%,100%{transform:translate(0,0)}50%{transform:translate(25px,-30px)}}
+@keyframes f3{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,20px)}}
+
+#app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px 12px}
+
+/* LOGO */
+.logo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:22px;animation:fadeD 0.8s ease both}
+@keyframes fadeD{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:translateY(0)}}
+.logo-ring-wrap{position:relative;width:96px;height:96px}
+.logo-ring{position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(var(--gold),var(--gold-light),#fff,var(--gold));animation:spin 7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.logo-inner{position:absolute;inset:4px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--deep));display:flex;align-items:center;justify-content:center;overflow:hidden}
+.logo-img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.logo-icon{font-size:28px}
+.app-name{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--white);text-align:center;letter-spacing:0.03em;margin-top:12px;line-height:1.3}
+.app-sub{font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:0.14em;text-transform:uppercase;margin-top:5px;text-align:center}
+
+/* STATUS FIREBASE */
+.fb-status{display:flex;align-items:center;gap:7px;font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.06);margin-bottom:10px;color:rgba(255,255,255,0.5)}
+.fb-dot{width:7px;height:7px;border-radius:50%;background:#888;flex-shrink:0;transition:background 0.4s}
+.fb-dot.ok{background:#3bb980;box-shadow:0 0 6px #3bb98088}
+.fb-dot.err{background:#f09595}
+
+/* NAV */
+.nav-bar{display:flex;background:rgba(255,255,255,0.07);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:50px;padding:4px;margin-bottom:28px}
+.nav-tab{padding:8px 18px;border-radius:40px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.05em;color:rgba(255,255,255,0.55);cursor:pointer;border:none;background:transparent;transition:all 0.3s;white-space:nowrap}
+.nav-tab.active{background:var(--gold);color:var(--deep);font-weight:700;box-shadow:0 4px 16px rgba(212,168,67,0.45)}
+.nav-tab:hover:not(.active){color:#fff;background:rgba(255,255,255,0.09)}
+
+/* CARD */
+.card{background:rgba(255,255,255,0.07);backdrop-filter:blur(22px);border:1px solid var(--border);border-radius:24px;padding:28px;width:100%;max-width:500px;box-shadow:var(--shadow);animation:fadeU 0.6s ease both}
+@keyframes fadeU{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.card-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--white);margin-bottom:4px;font-weight:500}
+.card-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:20px}
+
+/* FORM */
+.flabel{display:block;font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;margin-top:16px}
+.flabel:first-of-type{margin-top:0}
+.finput{width:100%;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:11px;padding:12px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--white);outline:none;transition:all 0.3s;-webkit-appearance:none}
+.finput::placeholder{color:rgba(255,255,255,0.25)}
+.finput:focus{border-color:var(--gold);background:rgba(255,255,255,0.11);box-shadow:0 0 0 3px rgba(212,168,67,0.15)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.toggle-row{display:flex;gap:10px;margin-top:6px}
+.toggle-btn{flex:1;padding:11px;border-radius:11px;border:1px solid var(--border);background:transparent;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:rgba(255,255,255,0.55);cursor:pointer;transition:all 0.25s;font-weight:500}
+.toggle-btn.sel-yes{background:rgba(34,109,104,0.4);border-color:#226d68;color:#5dcaa5;font-weight:600}
+.toggle-btn.sel-no{background:rgba(200,60,60,0.2);border-color:rgba(200,60,60,0.4);color:#f09595;font-weight:600}
+.btn-submit{width:100%;margin-top:22px;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--deep);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;border:none;border-radius:12px;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 18px rgba(212,168,67,0.35)}
+.btn-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 26px rgba(212,168,67,0.5)}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed}
+.toast{display:none;align-items:center;gap:10px;background:rgba(29,158,117,0.18);border:1px solid rgba(29,158,117,0.35);border-radius:11px;padding:13px 16px;margin-top:14px;color:#5dcaa5;font-size:12px;font-weight:500}
+.toast.show{display:flex}
+.toast-err{display:none;align-items:center;gap:10px;background:rgba(200,60,60,0.18);border:1px solid rgba(200,60,60,0.35);border-radius:11px;padding:13px 16px;margin-top:14px;color:#f09595;font-size:12px;font-weight:500}
+.toast-err.show{display:flex}
+
+/* LOGIN */
+.login-icon{font-size:36px;text-align:center;margin-bottom:12px}
+#login-err{display:none;color:#f09595;font-size:12px;text-align:center;margin-top:10px}
+
+/* DASHBOARD */
+.dash-wrap{width:100%;max-width:1020px}
+.dash-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.dash-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--white);font-weight:500}
+.role-badge{font-size:11px;background:rgba(212,168,67,0.18);color:var(--gold);padding:4px 11px;border-radius:20px;border:1px solid rgba(212,168,67,0.3)}
+.btn-out{background:rgba(255,255,255,0.07);border:1px solid var(--border);color:rgba(255,255,255,0.65);font-size:12px;padding:7px 14px;border-radius:20px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:0.2s}
+.btn-out:hover{background:rgba(255,255,255,0.13)}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.stat-card{background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center}
+.stat-val{font-size:26px;font-weight:700;color:var(--white);line-height:1}
+.stat-lbl{font-size:10px;color:rgba(255,255,255,0.4);margin-top:4px;letter-spacing:0.06em;text-transform:uppercase}
+.stat-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 6px}
+
+/* TABS + SEARCH */
+.dash-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.dtab{padding:7px 16px;border-radius:20px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:500;color:rgba(255,255,255,0.5);cursor:pointer;border:1px solid transparent;background:rgba(255,255,255,0.05);transition:0.2s}
+.dtab.on{background:rgba(255,255,255,0.13);border-color:var(--border);color:#fff}
+.dtab:hover:not(.on){color:#fff;background:rgba(255,255,255,0.08)}
+.search-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.search-in{flex:1;min-width:180px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:10px;padding:9px 13px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;color:#fff;outline:none}
+.search-in::placeholder{color:rgba(255,255,255,0.3)}
+.search-in:focus{border-color:var(--gold)}
+.filter-sel{background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;color:rgba(255,255,255,0.7);outline:none;cursor:pointer;-webkit-appearance:none}
+.filter-sel option{background:#18534f}
+
+/* TABLE */
+.tbl-wrap{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:16px;overflow:auto;max-height:420px}
+table{width:100%;border-collapse:collapse;min-width:700px}
+thead tr{background:rgba(255,255,255,0.06);position:sticky;top:0;z-index:2}
+th{padding:11px 14px;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.45);text-align:left;white-space:nowrap;border-bottom:1px solid var(--border)}
+td{padding:11px 14px;font-size:12px;color:rgba(255,255,255,0.8);border-bottom:1px solid rgba(255,255,255,0.05);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.04)}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:0.05em}
+.b-yes{background:rgba(34,109,104,0.35);color:#5dcaa5;border:1px solid rgba(34,109,104,0.5)}
+.b-no{background:rgba(200,60,60,0.2);color:#f09595;border:1px solid rgba(200,60,60,0.35)}
+.td-actions{display:flex;gap:6px}
+.btn-sm{font-size:10px;padding:4px 9px;border-radius:7px;border:1px solid var(--border);background:transparent;color:rgba(255,255,255,0.6);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:0.2s;white-space:nowrap}
+.btn-sm:hover{background:rgba(255,255,255,0.1)}
+.btn-sm.gold{background:rgba(212,168,67,0.15);color:var(--gold);border-color:rgba(212,168,67,0.3)}
+.btn-sm.red{background:rgba(200,60,60,0.15);color:#f09595;border-color:rgba(200,60,60,0.3)}
+.empty-row td{text-align:center;padding:30px;color:rgba(255,255,255,0.2);font-size:12px}
+.loading-row td{text-align:center;padding:30px;color:rgba(255,255,255,0.35);font-size:12px}
+
+/* EXPORT */
+.export-row{display:flex;gap:8px;margin-top:12px;justify-content:flex-end}
+.btn-export{font-size:11px;padding:7px 14px;border-radius:9px;border:1px solid var(--border);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.65);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:0.2s}
+.btn-export:hover{background:rgba(255,255,255,0.12)}
+
+/* ADMIN PANEL */
+.admin-box{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:16px;padding:18px;margin-top:16px}
+.admin-hdr{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px}
+.logo-change-row{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px}
+.logo-thumb{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--deep));display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;flex-shrink:0;border:2px solid rgba(255,255,255,0.15)}
+.logo-thumb img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.logo-change-info{flex:1}
+.logo-change-title{font-size:12px;font-weight:600;color:rgba(255,255,255,0.75);margin-bottom:3px}
+.logo-change-sub{font-size:11px;color:rgba(255,255,255,0.35)}
+.btn-logo-change{background:var(--gold);color:var(--deep);border:none;border-radius:9px;padding:8px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:0.2s;white-space:nowrap}
+.btn-logo-change:hover{background:var(--gold-light)}
+.staff-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;min-height:20px}
+.staff-chip{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:rgba(255,255,255,0.7)}
+.chip-del{background:rgba(200,60,60,0.2);color:#f09595;border:none;width:16px;height:16px;border-radius:50%;cursor:pointer;font-size:10px;font-family:'Plus Jakarta Sans',sans-serif;line-height:1}
+.add-row{display:flex;gap:8px;flex-wrap:wrap}
+.add-in{flex:1;min-width:100px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;color:#fff;outline:none}
+.add-in::placeholder{color:rgba(255,255,255,0.3)}
+.add-in:focus{border-color:var(--gold)}
+.btn-add{background:var(--gold);color:var(--deep);border:none;border-radius:10px;padding:9px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:0.2s;white-space:nowrap}
+.btn-add:hover{background:var(--gold-light)}
+
+.page{display:none}.page.active{display:flex;flex-direction:column;align-items:center;width:100%}
+.hidden{display:none!important}
+.file-in{display:none}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:sp 0.7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="bg-grad"></div>
+<div class="bg-pattern"></div>
+<div class="bg-orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+<div id="app">
+
+  <!-- LOGO -->
+  <div class="logo-wrap">
+    <div class="logo-ring-wrap">
+      <div class="logo-ring"></div>
+      <div class="logo-inner">
+        <img id="logoImg" class="logo-img hidden" src="" alt="">
+        <span id="logoIcon" class="logo-icon">🕌</span>
+      </div>
+    </div>
+    <input type="file" id="logoIn" class="file-in" accept="image/*">
+    <div class="app-name">Touba Creil<br><span style="font-size:14px;font-weight:500;opacity:0.85">Cuisine & Transport</span></div>
+    <div class="app-sub">Grand Magal de Touba · Creil</div>
+  </div>
+
+  <!-- FIREBASE STATUS -->
+  <div class="fb-status" id="fb-status">
+    <div class="fb-dot" id="fb-dot"></div>
+    <span id="fb-status-txt">Connexion Firebase…</span>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav-bar">
+    <button class="nav-tab active" onclick="gotoPage('guest')">Enregistrement</button>
+    <button class="nav-tab" onclick="gotoPage('login')">Espace Admin</button>
+  </div>
+
+  <!-- PAGE GUEST -->
+  <div id="page-guest" class="page active">
+    <div class="card">
+      <div class="card-title">Fiche d'accueil</div>
+      <div class="card-sub">Renseignez vos informations pour être pris en charge</div>
+      <label class="flabel">Nom complet</label>
+      <input class="finput" id="g-name" type="text" placeholder="Ex : Moustapha Diallo">
+      <label class="flabel">Numéro de téléphone</label>
+      <input class="finput" id="g-phone" type="tel" placeholder="Ex : +33 6 12 34 56 78">
+      <div class="row2">
+        <div>
+          <label class="flabel">Heure d'arrivée</label>
+          <input class="finput" id="g-arrive" type="time">
+        </div>
+        <div>
+          <label class="flabel">Heure de retour</label>
+          <input class="finput" id="g-depart" type="time">
+        </div>
+      </div>
+      <label class="flabel">Déjà servi(e) ?</label>
+      <div class="toggle-row">
+        <button class="toggle-btn" id="btn-yes" onclick="setServed(true)">✓ Oui</button>
+        <button class="toggle-btn" id="btn-no" onclick="setServed(false)">✗ Non</button>
+      </div>
+      <label class="flabel">Destination (retour)</label>
+      <input class="finput" id="g-dest" type="text" placeholder="Ex : Paris, Creil centre, Senlis…">
+      <button class="btn-submit" id="btn-guest-submit" onclick="submitGuest()">✦ Valider mon enregistrement</button>
+      <div class="toast" id="toast"><span style="font-size:16px">✓</span><span>Enregistrement sauvegardé dans Firebase !</span></div>
+      <div class="toast-err" id="toast-err"><span>⚠</span><span id="toast-err-msg">Erreur lors de la sauvegarde.</span></div>
+    </div>
+  </div>
+
+  <!-- PAGE LOGIN -->
+  <div id="page-login" class="page">
+    <div class="card" style="max-width:360px">
+      <div class="login-icon">🔐</div>
+      <div class="card-title" style="text-align:center">Espace Admin</div>
+      <div class="card-sub" style="text-align:center">Réservé au personnel autorisé</div>
+      <label class="flabel">Identifiant</label>
+      <input class="finput" id="l-user" type="text" placeholder="Votre identifiant" onkeydown="if(event.key==='Enter')doLogin()">
+      <label class="flabel">Mot de passe</label>
+      <input class="finput" id="l-pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <div id="login-err">Identifiants incorrects. Réessayez.</div>
+      <button class="btn-submit" id="btn-login" onclick="doLogin()">Connexion →</button>
+    </div>
+  </div>
+
+  <!-- PAGE DASHBOARD -->
+  <div id="page-dash" class="page">
+    <div class="dash-wrap">
+      <div class="dash-top">
+        <div>
+          <div class="dash-title">Tableau de bord</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px" id="dash-date"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span class="role-badge" id="dash-role">Admin</span>
+          <button class="btn-out" onclick="doLogout()">Déconnexion</button>
+        </div>
+      </div>
+
+      <div class="stats-row" id="stats-row">
+        <div class="stat-card"><div class="stat-dot" style="background:#378add"></div><div class="stat-val" id="s-total">—</div><div class="stat-lbl">Inscrits</div></div>
+        <div class="stat-card"><div class="stat-dot" style="background:#3bb980"></div><div class="stat-val" id="s-served">—</div><div class="stat-lbl">Servis</div></div>
+        <div class="stat-card"><div class="stat-dot" style="background:#d4a843"></div><div class="stat-val" id="s-pending">—</div><div class="stat-lbl">En attente</div></div>
+        <div class="stat-card"><div class="stat-dot" style="background:#9f7aea"></div><div class="stat-val" id="s-transport">—</div><div class="stat-lbl">Transport</div></div>
+      </div>
+
+      <div class="dash-tabs">
+        <button class="dtab on" onclick="setDtab(this,'all')">Tous</button>
+        <button class="dtab" onclick="setDtab(this,'served-no')">Non servis</button>
+        <button class="dtab" onclick="setDtab(this,'served-yes')">Servis</button>
+        <button class="dtab" onclick="setDtab(this,'transport')">Transport</button>
+      </div>
+
+      <div class="search-row">
+        <input class="search-in" id="srch" type="text" placeholder="🔍  Rechercher un nom, téléphone, destination…" oninput="renderTable()">
+        <select class="filter-sel" id="sortBy" onchange="renderTable()">
+          <option value="newest">Les plus récents</option>
+          <option value="oldest">Les plus anciens</option>
+          <option value="name">Nom A–Z</option>
+          <option value="arrive">Heure d'arrivée</option>
+        </select>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Nom complet</th><th>Téléphone</th><th>Arrivée</th>
+              <th>Servi(e)</th><th>Retour</th><th>Destination</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tbl-body"><tr class="loading-row"><td colspan="8"><span class="spinner"></span>Chargement depuis Firebase…</td></tr></tbody>
+        </table>
+      </div>
+
+      <div class="export-row">
+        <button class="btn-export" onclick="exportCSV()">⬇ Exporter CSV</button>
+      </div>
+
+      <!-- SUPER ADMIN UNIQUEMENT -->
+      <div class="admin-box" id="admin-box" style="display:none">
+        <div class="admin-hdr">Logo de l'application</div>
+        <div class="logo-change-row">
+          <div class="logo-thumb" id="logo-thumb-admin">
+            <img id="logoThumbImg" class="hidden" src="" alt="">
+            <span id="logoThumbIcon">🕌</span>
+          </div>
+          <div class="logo-change-info">
+            <div class="logo-change-title">Logo actuel</div>
+            <div class="logo-change-sub">Formats acceptés : JPG, PNG, WEBP</div>
+          </div>
+          <button class="btn-logo-change" onclick="document.getElementById('logoIn').click()">✎ Modifier</button>
+        </div>
+
+        <div class="admin-hdr" style="margin-top:4px">Gérer les administrateurs</div>
+        <div class="staff-chips" id="staff-chips"><span style="color:rgba(255,255,255,0.25);font-size:12px">Chargement…</span></div>
+        <div class="add-row">
+          <input class="add-in" id="new-uid" type="text" placeholder="Identifiant">
+          <input class="add-in" id="new-name" type="text" placeholder="Nom affiché" style="max-width:150px">
+          <input class="add-in" id="new-pwd" type="password" placeholder="Mot de passe" style="max-width:140px">
+          <select class="add-in filter-sel" id="new-role" style="max-width:130px">
+            <option value="admin">Admin</option>
+            <option value="superadmin">Super Admin</option>
+          </select>
+          <button class="btn-add" onclick="addAdmin()">+ Ajouter</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FIREBASE SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc,
+  onSnapshot, query, orderBy, serverTimestamp, setDoc, getDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAJjiFar74ynJd0kebz2Wduc8N2efeXJbA",
+  authDomain: "touba-creil-2026.firebaseapp.com",
+  projectId: "touba-creil-2026",
+  storageBucket: "touba-creil-2026.firebasestorage.app",
+  messagingSenderId: "433955485137",
+  appId: "1:433955485137:web:43875232d54e7f12f15cf0"
+};
+
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+
+// COLLECTIONS
+const GUESTS_COL = "guests";
+const ADMINS_COL = "admins";
+
+// ÉTAT LOCAL
+let allGuests = [];
+let allAdmins = [];
+let currentUser = null;
+let activeFilter = "all";
+let servedState = null;
+let unsubscribeGuests = null;
+
+// SUPER ADMIN HARDCODÉ (ne passe pas par Firestore)
+const SUPER = { uid:"superadmin", pwd:"touba2026!", name:"Super Administrateur", role:"superadmin" };
+
+// ─── FIREBASE STATUS ───
+function setFbStatus(ok, msg) {
+  document.getElementById("fb-dot").className = "fb-dot " + (ok ? "ok" : "err");
+  document.getElementById("fb-status-txt").textContent = msg;
+}
+
+// ─── INIT ───
+async function init() {
+  try {
+    // Vérifier la connexion en lisant admins
+    await getDocs(collection(db, ADMINS_COL));
+    setFbStatus(true, "Firebase connecté · touba-creil-2026");
+    await seedDefaultAdmins();
+  } catch(e) {
+    setFbStatus(false, "Erreur Firebase : " + e.message);
+  }
+}
+
+async function seedDefaultAdmins() {
+  const snap = await getDocs(collection(db, ADMINS_COL));
+  if (snap.empty) {
+    await setDoc(doc(db, ADMINS_COL, "cuisine1"), { uid:"cuisine1", pwd:"cuisine2026", name:"Resp. Cuisine", role:"admin" });
+    await setDoc(doc(db, ADMINS_COL, "transport1"), { uid:"transport1", pwd:"transport2026", name:"Resp. Transport", role:"admin" });
+  }
+}
+
+// ─── NAVIGATION ───
+window.gotoPage = function(p) {
+  document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
+  document.querySelectorAll(".nav-tab").forEach(x => x.classList.remove("active"));
+  document.getElementById("page-" + p).classList.add("active");
+  const tabs = document.querySelectorAll(".nav-tab");
+  if (p === "guest") tabs[0].classList.add("active");
+  else tabs[1].classList.add("active");
+};
+
+// ─── FORMULAIRE INVITÉ ───
+window.setServed = function(v) {
+  servedState = v;
+  document.getElementById("btn-yes").className = "toggle-btn" + (v ? " sel-yes" : "");
+  document.getElementById("btn-no").className = "toggle-btn" + (!v ? " sel-no" : "");
+};
+
+window.submitGuest = async function() {
+  const name = document.getElementById("g-name").value.trim();
+  const phone = document.getElementById("g-phone").value.trim();
+  const arrive = document.getElementById("g-arrive").value;
+  const depart = document.getElementById("g-depart").value;
+  const dest = document.getElementById("g-dest").value.trim();
+  if (!name || !phone) { alert("Veuillez saisir au moins le nom et le téléphone."); return; }
+
+  const btn = document.getElementById("btn-guest-submit");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Enregistrement…';
+
+  try {
+    await addDoc(collection(db, GUESTS_COL), {
+      name, phone,
+      arrive: arrive || "—",
+      served: servedState === true,
+      depart: depart || "—",
+      dest: dest || "—",
+      createdAt: serverTimestamp()
+    });
+    ["g-name","g-phone","g-arrive","g-depart","g-dest"].forEach(id => document.getElementById(id).value = "");
+    servedState = null;
+    document.getElementById("btn-yes").className = "toggle-btn";
+    document.getElementById("btn-no").className = "toggle-btn";
+    const t = document.getElementById("toast");
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3500);
+  } catch(e) {
+    document.getElementById("toast-err-msg").textContent = "Erreur : " + e.message;
+    const te = document.getElementById("toast-err");
+    te.classList.add("show");
+    setTimeout(() => te.classList.remove("show"), 4000);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = "✦ Valider mon enregistrement";
+  }
+};
+
+// ─── LOGIN ───
+window.doLogin = async function() {
+  const u = document.getElementById("l-user").value.trim();
+  const p = document.getElementById("l-pass").value.trim();
+  document.getElementById("login-err").style.display = "none";
+  const btn = document.getElementById("btn-login");
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Connexion…';
+
+  try {
+    if (u === SUPER.uid && p === SUPER.pwd) { currentUser = {...SUPER}; openDash(); return; }
+    const snap = await getDocs(collection(db, ADMINS_COL));
+    let found = null;
+    snap.forEach(d => { const data = d.data(); if (data.uid === u && data.pwd === p) found = data; });
+    if (found) { currentUser = {...found}; openDash(); }
+    else { document.getElementById("login-err").style.display = "block"; }
+  } catch(e) {
+    document.getElementById("login-err").textContent = "Erreur Firebase : " + e.message;
+    document.getElementById("login-err").style.display = "block";
+  } finally {
+    btn.disabled = false; btn.innerHTML = "Connexion →";
+  }
+};
+
+function openDash() {
+  gotoPage("dash");
+  document.getElementById("dash-role").textContent = currentUser.name + " · " + (currentUser.role === "superadmin" ? "Super Admin" : "Admin");
+  const isSA = currentUser.role === "superadmin";
+  document.getElementById("admin-box").style.display = isSA ? "block" : "none";
+  const now = new Date();
+  document.getElementById("dash-date").textContent = now.toLocaleDateString("fr-FR", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+  startGuestsListener();
+  if (isSA) loadAdmins();
+}
+
+window.doLogout = function() {
+  if (unsubscribeGuests) { unsubscribeGuests(); unsubscribeGuests = null; }
+  currentUser = null;
+  document.getElementById("l-user").value = "";
+  document.getElementById("l-pass").value = "";
+  gotoPage("login");
+};
+
+// ─── TEMPS RÉEL : ÉCOUTE FIRESTORE ───
+function startGuestsListener() {
+  if (unsubscribeGuests) unsubscribeGuests();
+  const q = query(collection(db, GUESTS_COL), orderBy("createdAt", "desc"));
+  unsubscribeGuests = onSnapshot(q, snap => {
+    allGuests = [];
+    snap.forEach(d => allGuests.push({ id: d.id, ...d.data() }));
+    updateStats();
+    renderTable();
+  }, err => {
+    console.error("Firestore listener error:", err);
+  });
+}
+
+// ─── STATS ───
+function updateStats() {
+  const total = allGuests.length;
+  const served = allGuests.filter(g => g.served).length;
+  const pending = total - served;
+  const transport = allGuests.filter(g => g.dest && g.dest !== "—").length;
+  document.getElementById("s-total").textContent = total;
+  document.getElementById("s-served").textContent = served;
+  document.getElementById("s-pending").textContent = pending;
+  document.getElementById("s-transport").textContent = transport;
+}
+
+// ─── TABLE ───
+window.setDtab = function(el, f) {
+  document.querySelectorAll(".dtab").forEach(x => x.classList.remove("on"));
+  el.classList.add("on"); activeFilter = f; renderTable();
+};
+
+function filteredGuests() {
+  let list = [...allGuests];
+  const q = (document.getElementById("srch").value || "").toLowerCase();
+  const sort = document.getElementById("sortBy").value;
+  if (activeFilter === "served-yes") list = list.filter(g => g.served);
+  if (activeFilter === "served-no") list = list.filter(g => !g.served);
+  if (activeFilter === "transport") list = list.filter(g => g.dest && g.dest !== "—");
+  if (q) list = list.filter(g => (g.name + g.phone + g.dest).toLowerCase().includes(q));
+  if (sort === "oldest") list.reverse();
+  if (sort === "name") list.sort((a,b) => (a.name||"").localeCompare(b.name||""));
+  if (sort === "arrive") list.sort((a,b) => (a.arrive||"").localeCompare(b.arrive||""));
+  return list;
+}
+
+function renderTable() {
+  const tbody = document.getElementById("tbl-body");
+  const list = filteredGuests();
+  if (!list.length) {
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="8">Aucun enregistrement trouvé</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = list.map((g, i) => `
+    <tr>
+      <td style="color:rgba(255,255,255,0.3);font-size:11px">${i+1}</td>
+      <td style="font-weight:600;color:#fff">${esc(g.name)}</td>
+      <td>${esc(g.phone)}</td>
+      <td>${g.arrive || "—"}</td>
+      <td><span class="badge ${g.served ? "b-yes" : "b-no"}">${g.served ? "Oui" : "Non"}</span></td>
+      <td>${g.depart || "—"}</td>
+      <td>${esc(g.dest)}</td>
+      <td><div class="td-actions">
+        <button class="btn-sm gold" onclick="toggleServed('${g.id}',${g.served})">${g.served ? "Non servi" : "Marquer servi"}</button>
+        <button class="btn-sm red" onclick="deleteGuest('${g.id}')">✕</button>
+      </div></td>
+    </tr>`).join("");
+}
+
+function esc(s) { return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+window.toggleServed = async function(id, current) {
+  try { await updateDoc(doc(db, GUESTS_COL, id), { served: !current }); }
+  catch(e) { alert("Erreur : " + e.message); }
+};
+
+window.deleteGuest = async function(id) {
+  if (!confirm("Supprimer cet enregistrement ?")) return;
+  try { await deleteDoc(doc(db, GUESTS_COL, id)); }
+  catch(e) { alert("Erreur : " + e.message); }
+};
+
+// ─── EXPORT CSV ───
+window.exportCSV = function() {
+  const list = filteredGuests();
+  const rows = [["Nom","Téléphone","Heure d'arrivée","Servi","Heure de retour","Destination"]];
+  list.forEach(g => rows.push([g.name, g.phone, g.arrive, g.served?"Oui":"Non", g.depart, g.dest]));
+  const csv = rows.map(r => r.map(c => `"${(c||"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = "data:text/csv;charset=utf-8,\uFEFF" + encodeURIComponent(csv);
+  a.download = "touba-creil-" + new Date().toISOString().slice(0,10) + ".csv";
+  a.click();
+};
+
+// ─── ADMINS (Firestore) ───
+async function loadAdmins() {
+  try {
+    const snap = await getDocs(collection(db, ADMINS_COL));
+    allAdmins = [];
+    snap.forEach(d => allAdmins.push({ firestoreId: d.id, ...d.data() }));
+    renderAdmins();
+  } catch(e) { console.error(e); }
+}
+
+function renderAdmins() {
+  const sc = document.getElementById("staff-chips");
+  if (!allAdmins.length) { sc.innerHTML = `<span style="color:rgba(255,255,255,0.25);font-size:12px">Aucun admin ajouté</span>`; return; }
+  sc.innerHTML = allAdmins.map((a, i) => `
+    <div class="staff-chip">
+      👤 ${esc(a.name)} <span style="color:rgba(255,255,255,0.3);font-size:10px">(${esc(a.uid)})</span>
+      <button class="chip-del" onclick="removeAdmin('${a.firestoreId}')">✕</button>
+    </div>`).join("");
+}
+
+window.addAdmin = async function() {
+  const uid = document.getElementById("new-uid").value.trim();
+  const name = document.getElementById("new-name").value.trim() || uid;
+  const pwd = document.getElementById("new-pwd").value.trim();
+  const role = document.getElementById("new-role").value;
+  if (!uid || !pwd) { alert("Identifiant et mot de passe requis."); return; }
+  try {
+    await setDoc(doc(db, ADMINS_COL, uid), { uid, name, pwd, role });
+    ["new-uid","new-name","new-pwd"].forEach(id => document.getElementById(id).value = "");
+    await loadAdmins();
+  } catch(e) { alert("Erreur : " + e.message); }
+};
+
+window.removeAdmin = async function(firestoreId) {
+  if (!confirm("Supprimer cet administrateur ?")) return;
+  try { await deleteDoc(doc(db, ADMINS_COL, firestoreId)); await loadAdmins(); }
+  catch(e) { alert("Erreur : " + e.message); }
+};
+
+// ─── LOGO (super admin uniquement) ───
+document.getElementById("logoIn").addEventListener("change", function(e) {
+  if (!currentUser || currentUser.role !== "superadmin") return;
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    const src = ev.target.result;
+    const img = document.getElementById("logoImg"); const icon = document.getElementById("logoIcon");
+    img.src = src; img.classList.remove("hidden"); icon.classList.add("hidden");
+    const tImg = document.getElementById("logoThumbImg"); const tIcon = document.getElementById("logoThumbIcon");
+    tImg.src = src; tImg.classList.remove("hidden"); tIcon.classList.add("hidden");
+  };
+  r.readAsDataURL(f);
+  this.value = "";
+});
+
+// DÉMARRAGE
+init();
+</script>
+</body>
+</html>

@@ -10,5 +10,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Touba Creil 2026 en ligne sur le port ${PORT}`);
+  console.log(`Touba Creil 2026 - port ${PORT}`);
 });
